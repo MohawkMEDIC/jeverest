@@ -1,0 +1,3 @@
+Sample Name: org.marc.everest.samples.connectors.spring.client
+Description: Illustrates how an application can leverage the MARC-HI Everest framework to 
+			 connect to a pan-Canadian client registry and output the search results

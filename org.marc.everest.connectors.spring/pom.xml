@@ -1,0 +1,160 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.marc.everest</groupId>
+	<artifactId>everest-connectors-spring</artifactId>
+	<version>1.0.17</version>
+	<name>org.marc.everest.connectors.spring</name>
+	<description>Spring Connector for Everest</description>
+	<properties>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring.ws.version>2.0.2.RELEASE</spring.ws.version>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<links>
+						<link>http://docs.oracle.com/javase/6/docs/api/</link>
+						<link>http://te.marc-hi.ca/library/en/jdoc/jev/</link>
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+		<issueManagement>
+	    <url>http://te.marc-hi.ca/issue/default.aspx?project=6e2de429beae44359a1b23975a90a71b</url>
+    </issueManagement>
+
+	<developers>
+	    <developer>
+	        <name>Justin Fyfe</name>
+	        <organization>Mohawk College of Applied Arts and Technology</organization>
+	        <email>justin_dot_fyfe1_at_mohawkcollege_dot_ca</email>
+	    </developer>
+	</developers>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.marc.everest</groupId>
+			<artifactId>everest-core</artifactId>
+			<version>1.0.17</version>
+		</dependency>
+		<!-- Apache Commons Dependencies -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<!-- Spring Dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-core</artifactId>
+			<version>${spring.ws.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-security</artifactId>
+			<version>${spring.ws.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.wsit</groupId>
+					<artifactId>xws-security</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.wsit</groupId>
+					<artifactId>wsit-rt</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-support</artifactId>
+			<version>${spring.ws.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-xml</artifactId>
+			<version>${spring.ws.version}</version>
+		</dependency>
+	</dependencies>
+
+	<scm>
+		<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.0.17/org.marc.everest.connectors.spring</url>
+	</scm>
+	<repositories>
+		<repository>
+			<id>marc-te-main</id>
+			<url>http://te.marc-hi.ca/mvn</url>
+		</repository>
+	</repositories>
+	<organization>
+		<name>Mohawk College of Applied Arts and Technology</name>
+		<url>http://everest.marc-hi.ca</url>
+	</organization>
+	  <distributionManagement>
+       <site>
+          <id>marc-te-main-doc-distro</id>
+          <url>file://M:/org/marc/everest/everest-connectors-spring</url>
+      </site>
+      <repository>
+          <id>marc-te-main-distro</id>
+          <url>file://M:/</url>
+      </repository>
+  </distributionManagement>
+</project>
