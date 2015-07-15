@@ -69,7 +69,8 @@ public class SDFormatter extends ANYFormatter implements IDatatypeFormatter {
 			
 			if(instance_sd.getContent() != null)
 				for(StructDocNode nd : instance_sd.getContent())
-					nd.writeXml(s);
+					if(nd != null)
+						nd.writeXml(s);
 		} catch (XMLStreamException e) {
 			throw new FormatterException("Could not graph SD instance", e);
 		}

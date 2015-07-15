@@ -29,7 +29,7 @@ public @interface Property {
 
 	// HACK: See Structure.java
 	public final String NULL = "PRETEND I'M NULL";
-	
+	public final String NS_HL7 = "urn:hl7-org:v3";
 
 	/**
 	 * Gets the name of the property when serialized to the wire using the formatter 
@@ -114,4 +114,10 @@ public @interface Property {
 	 * @return
 	 */
 	int sortKey() default 0;
+	
+	/**
+	 * Specifies the desired namespace for the object
+	 * @return
+	 */
+	String namespaceUri() default NS_HL7;
 }

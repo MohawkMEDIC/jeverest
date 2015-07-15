@@ -107,6 +107,7 @@ public class PDVFormatter extends ANYFormatter {
 				// Hack: Parse as value
 				if(ANY.class.isAssignableFrom(FormatterUtil.getClassForType(parameterType)))
 				{
+					childContext.setIgnoreTypeCasting(true);
 					IFormatterParseResult hostResult = this.getHost().parse(s, childContext);
 					pdv.setValue(hostResult.getStructure());
 				}

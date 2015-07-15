@@ -359,7 +359,7 @@ public class DatatypeFormatter implements IXmlStructureFormatter,
         else
         {
         	 // Force processing as an XSI:Type
-            if (xr.getAttributeValue(NS_XSI, "type") != null)
+            if (xr.getAttributeValue(NS_XSI, "type") != null && !ctx.getIgnoreTypeCasting())
             {
             	String xsiType = xr.getAttributeValue(DatatypeFormatter.NS_XSI, "type");
         		// Is there a namespace prefix?

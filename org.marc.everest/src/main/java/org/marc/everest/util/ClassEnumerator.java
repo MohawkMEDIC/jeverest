@@ -116,7 +116,7 @@ public class ClassEnumerator {
 					String className = itmFile.getName().substring(0, itmFile.getName().length() - 3) + "JarInfo";
 					Class<?> clazz = clazzLoader.loadClass(className);
 					retVal.addAll(processJarFileContents(clazzLoader.getURLs()[0], clazz.getPackage().getName()));
-				} catch (ClassNotFoundException e) {
+				} catch (Exception e) {
 				}
 			}
 				

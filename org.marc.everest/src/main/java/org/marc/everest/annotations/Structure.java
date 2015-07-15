@@ -56,13 +56,15 @@ public @interface Structure
 	 */
 	boolean isEntryPoint() default false;
 	/**
-	 * Identifies the model to which the structure belongs
-	 * @return
+	 * Identifies the namespace of a custom type
+	 */
+	String namespaceUri() default Property.NS_HL7;
+	/**
+	 * Represents the model from which the type is being represented
 	 */
 	String model() default NULL;
 	/**
-	 * Identifies the publisher of the structure
-	 * @return
+	 * Represents the publisher of the model
 	 */
 	String publisher() default NULL;
 }

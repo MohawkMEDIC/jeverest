@@ -2,33 +2,33 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.marc.everest.samples</groupId>
   <artifactId>everest-samples-spring</artifactId>
-  <version>1.0.17</version>
+  <version>1.1.0</version>
   <name>org.marc.everest.samples</name>
   <description>MARC-HI Everest Framework Samples - Spring Framework</description>
   <dependencies>
       <dependency>
           <groupId>org.marc.everest</groupId>
           <artifactId>everest-formatters-xml-its1</artifactId>
-          <version>1.0.17</version>
+          <version>1.1.0</version>
       </dependency>
       <dependency>
           <groupId>org.marc.everest</groupId>
           <artifactId>everest-formatters-xml-dt-r1</artifactId>
-          <version>1.0.17</version>
+          <version>1.1.0</version>
       </dependency>
       <dependency>
           <groupId>org.marc.everest</groupId>
           <artifactId>everest-rmim-ca-r02-04-02</artifactId>
-          <version>1.0.17</version>
+          <version>1.1.0</version>
       </dependency>
        <dependency>
           <groupId>org.marc.everest</groupId>
           <artifactId>everest-connectors-spring</artifactId>
-          <version>1.0.17</version>
+          <version>1.1.0</version>
       </dependency>
   </dependencies>
 	<scm>
-		<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.0.17/samples/org.marc.everest.samples.connectors.spring.client</url>
+		<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.1.0/samples/org.marc.everest.samples.connectors.spring.client</url>
 	</scm>
 	<repositories>
 		<repository>

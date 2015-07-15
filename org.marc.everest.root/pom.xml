@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.marc.everest</groupId>
   <artifactId>everest-root</artifactId>
-  <version>1.0.17</version>
+  <version>1.1.0</version>
   <packaging>pom</packaging>
   <name>MARC-HI Everest</name>
   <modules>
@@ -10,12 +10,15 @@
   	<module>../org.marc.everest.connectors.spring</module>
   	<module>../org.marc.everest.formatters.xml.dt.r1</module>
   	<module>../org.marc.everest.formatters.xml.its1</module>
-<!-- 	<module>../org.marc.everest.rmim.ca.r020401</module>-->
+<!-- 
+	Uncomment these lines after receiving the RMIM projects from MEDIC
+	<module>../org.marc.everest.rmim.ca.r020401</module>
   	<module>../org.marc.everest.rmim.ca.r020402</module>
   	<module>../org.marc.everest.rmim.ca.r020403</module>
   	<module>../org.marc.everest.rmim.uv.cdar2</module>
  	<module>../org.marc.everest.rmim.uv.ne2008</module>
-  	<module>../org.marc.everest.rmim.uv.ne2010</module>
+  	<module>../org.marc.everest.rmim.uv.ne2010</module>-->
+  	<module>../org.marc.everest.test</module>
   	  		</modules>
   <description>The MARC-HI Everest Framework - A general purpose framework for the generation, parsing and exchange of HL7v3 messages.</description>
   <url>http://te.marc-hi.ca/mvn/org/marc/everest/</url>
@@ -24,7 +27,7 @@
   	<url>http://te.marc-hi.ca</url>
   </organization>
   <scm>
-  	<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.0.17/org.marc.everest.root</url>
+  	<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.1.0/org.marc.everest.root</url>
   </scm>
   	<issueManagement><url>http://te.marc-hi.ca/issue/default.aspx?project=6e2de429beae44359a1b23975a90a71b</url></issueManagement>
 	<developers>

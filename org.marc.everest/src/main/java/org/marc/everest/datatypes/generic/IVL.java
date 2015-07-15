@@ -419,9 +419,9 @@ public class IVL<T extends IAny> extends SXCM<T> implements IInterval<T>, IPqTra
         else if (this.getLow() != null && this.getHigh() != null)
             return String.format("{%s .. %s}", this.getLow(), this.getHigh());
         else if (this.getLow() != null)
-            return String.format("{%s ..}", this.getLow());
+            return String.format("{%s .. }", this.getLow());
         else if (this.getHigh() != null)
-            return String.format("{.. %s}", this.getHigh());
+            return String.format("{ .. %s}", this.getHigh());
         else return super.toString();
 	}
 	/* (non-Javadoc)

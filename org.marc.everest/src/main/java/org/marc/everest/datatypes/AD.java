@@ -231,17 +231,17 @@ public class AD extends ANY {
 		AD retVal = new AD();
 		if(use != null)
 			retVal.setUse(SET.createSET(new CS<PostalAddressUse>(use)));
-		if(addressLine1 != null)
+		if(addressLine1 != null && !addressLine1.isEmpty())
 			retVal.getPart().add(new ADXP(addressLine1, AddressPartType.AddressLine));
-		if(addressLine2 != null)
+		if(addressLine2 != null && !addressLine2.isEmpty())
 			retVal.getPart().add(new ADXP(addressLine2, AddressPartType.AddressLine));
-		if(city != null)
+		if(city != null && !city.isEmpty())
 			retVal.getPart().add(new ADXP(city, AddressPartType.City));
-		if(state != null)
+		if(state != null && !state.isEmpty())
 			retVal.getPart().add(new ADXP(state, AddressPartType.State));
-		if(country != null)
+		if(country != null && !country.isEmpty())
 			retVal.getPart().add(new ADXP(country, AddressPartType.Country));
-		if(zip != null)
+		if(zip != null && !zip.isEmpty())
 			retVal.getPart().add(new ADXP(zip, AddressPartType.PostalCode));
 		return retVal;
 	}

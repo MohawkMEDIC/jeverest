@@ -77,7 +77,8 @@ public class EDFormatter extends ANYFormatter {
 		
 		try {
 			// Attributes
-			s.writeAttribute("representation", instance.getRepresentation().getCode());
+			if(instance.getRepresentation() != null)
+				s.writeAttribute("representation", instance.getRepresentation().getCode());
 			if(instance.getMediaType() != null)
 				s.writeAttribute("mediaType", instance.getMediaType());
 			if(instance.getLanguage() != null)

@@ -1,10 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.marc.everest</groupId>
-	<artifactId>everest-formatters-xml-its1</artifactId>
+	<artifactId>everest-test</artifactId>
 	<version>1.1.0</version>
-	<name>org.marc.everest.formatters.xml.its1</name>
-	<description>XML ITS1 Formatter		</description>
+	<name>org.marc.everest.test</name>
+	<description>MARC-Everest External Test</description>
+	<properties>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	  </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.marc.everest</groupId>
@@ -12,13 +16,39 @@
 			<version>1.1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.marc.everest</groupId>
+			<artifactId>everest-formatters-xml-its1</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.marc.everest</groupId>
+			<artifactId>everest-formatters-xml-dt-r1</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.marc.everest</groupId>
+			<artifactId>everest-rmim-uv-cdar2</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+				<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+	<organization>
+		<name>Mohawk College of Applied Arts and Technology. Based on models Copyright (C) Health Level 7 International</name>
+	</organization>
+	<scm>
+		<url>https://fisheye.marc-hi.ca/svn/jEverest/branches/1.1.0/org.marc.everest.rmim.uv.cdar2</url>
+	</scm>
+	<repositories>
+		<repository>
+			<id>marc-te-main</id>
+			<url>http://te.marc-hi.ca/mvn</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -33,48 +63,24 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
+				    <charset>utf8</charset>
 					<links>
 						<link>http://docs.oracle.com/javase/6/docs/api/</link>
 						<link>http://te.marc-hi.ca/library/en/jdoc/jev/</link>
 					</links>
 				</configuration>
-			</plugin>
+			</plugin>	
 		</plugins>
 	</build>
-		<issueManagement>
-	    <url>http://te.marc-hi.ca/issue/default.aspx?project=6e2de429beae44359a1b23975a90a71b</url>
-    </issueManagement>
-
-	<developers>
-	    <developer>
-	        <name>Justin Fyfe</name>
-	        <organization>Mohawk College of Applied Arts and Technology</organization>
-	        <email>justin_dot_fyfe1_at_mohawkcollege_dot_ca</email>
-	    </developer>
-	</developers>
-	
-	<scm>
-		<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.1.0/org.marc.everest.formatters.xml.its1</url>
-	</scm>
-	<repositories>
-		<repository>
-			<id>marc-te-main</id>
-			<url>http://te.marc-hi.ca/mvn</url>
-		</repository>
-	</repositories>
-	<organization>
-		<name>Mohawk College of Applied Arts and Technology</name>
-		<url>http://everest.marc-hi.ca</url>
-	</organization>
-  <distributionManagement>
- 	<site>
+	  <distributionManagement>
+       		<site>
           <id>marc-te-main-doc-distro</id>
-          <url>file://M:/org/marc/everest/everest-formatters-xml-its1</url>
+          <url>file://M:/org/marc/everest/everest-rmim-uv-cdar2</url>
       </site>
       <repository>
           <id>marc-te-main-distro</id>
           <url>file://M:/</url>
       </repository>
-  </distributionManagement>
 
+  </distributionManagement>
 </project>

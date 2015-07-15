@@ -41,6 +41,7 @@ import org.marc.everest.annotations.Property;
 import org.marc.everest.annotations.PropertyType;
 import org.marc.everest.annotations.Structure;
 import org.marc.everest.annotations.StructureType;
+import org.marc.everest.annotations.TypeMap;
 import org.marc.everest.datatypes.ANY;
 import org.marc.everest.datatypes.NullFlavor;
 import org.marc.everest.datatypes.generic.CS;
@@ -194,19 +195,21 @@ public class ReflectionFormatter {
 				isEntryPoint = true;
 				// Write interaction name
 				String renderName = struct.name();
+				String namespaceUri = struct.namespaceUri(),
+						pfx = xw.getPrefix(namespaceUri);
+
 				if(!struct.isEntryPoint() && struct.structureType() != StructureType.INTERACTION)
 				{
 					// TODO: Output warning to result
 					String str = o.getClass().getName();
 					str = str.substring(str.lastIndexOf(".") + 1);
-					
-					xw.writeStartElement(this.getHost().getElementPrefix(), str, XmlIts1Formatter.NS_HL7);
+					xw.writeStartElement(pfx, str, namespaceUri);
 				}
 				else
-					xw.writeStartElement(this.getHost().getElementPrefix(), struct.name(), XmlIts1Formatter.NS_HL7);
+					xw.writeStartElement(pfx, struct.name(), namespaceUri);
 
-				xw.setPrefix(this.getHost().getElementPrefix(), XmlIts1Formatter.NS_HL7);
-				xw.writeNamespace(this.getHost().getElementPrefix(), XmlIts1Formatter.NS_HL7);
+				xw.setDefaultNamespace(namespaceUri);
+				xw.writeDefaultNamespace(namespaceUri);
 				xw.setPrefix("xsi", XmlIts1Formatter.NS_XSI);
 				xw.writeNamespace("xsi", XmlIts1Formatter.NS_XSI);
 
@@ -248,8 +251,10 @@ public class ReflectionFormatter {
             					if(context == null || rootContext.getOwnerClazz().equals(currentContext.getPropertyAnnotation().interactionOwner()))
             						break;
             			}
-            			else if(candidateAtt.type().equals(Object.class) && currentContext.getPropertyAnnotation() == null)
+            			else if((candidateAtt.type().isAssignableFrom(propertyValue.getClass()) || candidateAtt.type().equals(Object.class)) && currentContext.getPropertyAnnotation() == null)
             				currentContext.setPropertyAnnotation(candidateAtt);
+            			
+            		
             	}
 
             	// Property attribute
@@ -542,7 +547,6 @@ public class ReflectionFormatter {
 		
 		// Construct the object
 		Class<?> actualType = FormatterUtil.getClassForType(ctx.getOwnerClazz(), ctx);
-		
 
 		// HACK: Overcome the List interface by getting the actual type
 		if(actualType.isInterface() && actualType.equals(List.class))
@@ -647,7 +651,9 @@ public class ReflectionFormatter {
 							childContext = ctx.findChildContextFromName(xr.getLocalName(), PropertyType.TRAVERSABLEASSOCIATION);
 
 						// Can't serialize this
-						if(childContext == null || !xr.getNamespaceURI().equals(XmlIts1Formatter.NS_HL7))
+						if(childContext == null || 
+								childContext.getPropertyAnnotation() != null &&
+								!xr.getNamespaceURI().equals(childContext.getPropertyAnnotation().namespaceUri()))
 						{
 							childContext = ctx.findChildContextFromName(xr.getLocalName(), PropertyType.TRAVERSABLEASSOCIATION);
 							resultContext.addResultDetail(new NotImplementedElementResultDetail(ResultDetailType.WARNING, xr.getLocalName(), xr.getNamespaceURI(), xr.toString(), null));

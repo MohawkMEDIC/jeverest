@@ -48,7 +48,7 @@ import org.marc.everest.resultdetails.ResultDetail;
 /**
  * Represents a formatter that is capable of formatting to/from EIVL format
  */
-public class EIVLFormatter extends ANYFormatter {
+public class EIVLFormatter extends SXCMFormatter {
 
 	/**
 	 * Graph the object o onto the stream writer s
@@ -67,8 +67,6 @@ public class EIVLFormatter extends ANYFormatter {
 	        // Append the attributes to the writer
 	        if (instance.isNull())
 	            return; // Nothing to report
-	        if (instance.getOperator() != null)
-	            s.writeAttribute("operator", instance.getOperator().getCode());
 	
 	        // Write elements
 	        if (instance.getEvent() != null)
@@ -100,11 +98,7 @@ public class EIVLFormatter extends ANYFormatter {
 	public Object parse(XMLStreamReader s, FormatterElementContext context,
 			DatatypeFormatterParseResult result) {
 		
-		EIVL<?> retVal = super.parse(s, context, result, EIVL.class);
-		
-		// Operator attribute
-		if(s.getAttributeValue(null, "operator") != null)
-			retVal.setOperator(FormatterUtil.fromWireFormat(s.getAttributeValue(null, "operator"), SetOperator.class));
+		EIVL<?> retVal = super.parseSxcm(s, context, result, EIVL.class);
 		
 		// Content / Elements
 		if(!s.isEndElement())
@@ -181,8 +175,7 @@ public class EIVLFormatter extends ANYFormatter {
 		List<String> retVal = super.getSupportedProperties();
 		retVal.addAll(Arrays.asList(
 				"event",
-				"offset",
-				"operator"
+				"offset"
 				));
 		return retVal;
 	}

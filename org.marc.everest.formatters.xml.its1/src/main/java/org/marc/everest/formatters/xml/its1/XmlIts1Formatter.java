@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -40,6 +41,7 @@ import org.marc.everest.annotations.Structure;
 import org.marc.everest.annotations.StructureType;
 import org.marc.everest.datatypes.ANY;
 import org.marc.everest.datatypes.interfaces.INormalizable;
+import org.marc.everest.exceptions.DuplicateItemException;
 import org.marc.everest.datatypes.interfaces.ISetComponent;
 import org.marc.everest.exceptions.FormatterException;
 import org.marc.everest.exceptions.ObjectDisposedException;
@@ -84,10 +86,10 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 	private boolean m_validateConformance = true;
 	// already loaded has maps
 	private Map<String, Class<?>> m_rootNameMaps = new HashMap<String, Class<?>>();
+	// xsi:type registrations
+	private Map<String, Class<?>> s_typeNameMaps = new HashMap<String, Class<?>>();
 	// Reflection formatter instance
 	private ReflectionFormatter m_reflectFormatter;
-	// Prefix
-	private String m_prefix = "hl7";
 	
 	/**
 	 * Creates a new instance of the XML ITS 1 formatter
@@ -95,23 +97,6 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 	public XmlIts1Formatter() {
 		this.m_reflectFormatter = new ReflectionFormatter();
 		this.m_reflectFormatter.setHost(this);
-	}
-	
-	/**
-	 * Gets the prefix used for the HL7 namespace
-	 * @return
-	 */
-	public String getElementPrefix() {
-		return this.m_prefix;
-	}
-	
-	/**
-	 * Sets the element prefix
-	 * @param prefix
-	 */
-	public void setElementPrefix(String prefix)
-	{
-		this.m_prefix = prefix;
 	}
 	
 	/**
@@ -361,12 +346,12 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 					// Setup namespace prefix
 					xsWriter.writeStartDocument();
 					// Writer start element
-					xsWriter.setPrefix(this.m_prefix, NS_HL7);
 					xsWriter.setPrefix("xsi", NS_XSI);
 					String str = o.getClass().getName();
 					str = str.substring(str.lastIndexOf(".") + 1);
-					xsWriter.writeStartElement(this.m_prefix, str, XmlIts1Formatter.NS_HL7);
-					xsWriter.writeNamespace(this.m_prefix, XmlIts1Formatter.NS_HL7);
+					xsWriter.writeStartElement(str, XmlIts1Formatter.NS_HL7);
+					xsWriter.setDefaultNamespace(structureAttribute.namespaceUri());
+					xsWriter.writeDefaultNamespace(structureAttribute.namespaceUri());
 					xsWriter.writeNamespace("xsi", XmlIts1Formatter.NS_XSI);
 				}
 			}
@@ -445,17 +430,23 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 			value = ((INormalizable)value).normalize();
 		
 		// Write start element
-		xw.writeStartElement(this.m_prefix, elementName, XmlIts1Formatter.NS_HL7);
+		String propertyNamespace = context.getPropertyAnnotation(elementName).namespaceUri(),
+				pfx = xw.getNamespaceContext().getPrefix(propertyNamespace);
+		boolean isChangingNamespace = !xw.getCurrentElement().getNamespaceURI().equals(propertyNamespace);
+
+		xw.writeStartElement(pfx, elementName, propertyNamespace);
+		if(isChangingNamespace && (pfx == null || pfx.equals("")))
+			xw.writeDefaultNamespace(propertyNamespace);
 		
 		// Output XSI:TYPE
-		if(!value.getClass().equals(asType) && ANY.class.isAssignableFrom(value.getClass()))
+		if(!value.getClass().equals(asType))
 		{
-			String xsiType = FormatterUtil.createXsiTypeName(value),
-					pfx = xw.getNamespaceContext().getPrefix(XmlIts1Formatter.NS_HL7);
+			String xsiType = FormatterUtil.createXsiTypeName(value);
 			
 			// HACK: ISetComponent usually means it was a GTS, lets make an adjustment
-			if(context.getPropertyAnnotation() != null && context.getPropertyAnnotation().genericSupplier().length != 0 && !xsiType.contains("_"))
+			if(value.getClass().getTypeParameters().length > 0 && context.getPropertyAnnotation() != null && context.getPropertyAnnotation().genericSupplier().length != 0 && !xsiType.contains("_"))
 			{
+				
 				// Make sure the generic supplier is in there
 				for(Class<?> gs : context.getPropertyAnnotation().genericSupplier())
 				{
@@ -467,8 +458,32 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 				
 			if(pfx != null && pfx != "")
 				xsiType = pfx + ":" + xsiType;
-			
-			xw.writeAttribute("xsi", XmlIts1Formatter.NS_XSI, "type", xsiType);
+
+			// Assign only 
+			if(ANY.class.isAssignableFrom(value.getClass()))
+			{
+				if(pfx != null && pfx != "")
+					xsiType = pfx + ":" + xsiType;
+			}
+			else
+			{
+				String typeName = this.createXSITypeName(value.getClass(), context, xw.getNamespaceContext());
+
+                // If there is no different then don't output
+                if (!typeName.equals(this.createXSITypeName((Class<?>)asType, context, xw.getNamespaceContext())))
+                {                    
+                    xsiType = typeName;
+                    synchronized (this.s_typeNameMaps) {
+                    	if (!this.s_typeNameMaps.containsKey(typeName))
+                            this.registerXSITypeName(typeName, value.getClass());
+					}
+                        
+                }
+                else
+                	xsiType="";
+			}
+			if(!xsiType.isEmpty())
+				xw.writeAttribute("xsi", XmlIts1Formatter.NS_XSI, "type", xsiType);
 		}
 		
 		this.graphObjectInternal(xw, value,  context, resultContext);
@@ -549,6 +564,7 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 		provisionGraphAides();
 
 		
+		
 		XmlIts1FormatterParseResult resultContext = new XmlIts1FormatterParseResult(ResultCodeType.Accepted, null);
 		
 		// Go to an element
@@ -558,7 +574,7 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 				xr.next();
 		
 			// Sanity check namespaceURI
-			if(!xr.hasNext() || !xr.getNamespaceURI().equals(XmlIts1Formatter.NS_HL7))
+			if(!xr.hasNext())
 				throw new FormatterException(String.format("Can't parse '%s' from namespace '%s'. The data does not appear to be HL7v3 data", xr.getName(), xr.getNamespaceURI()));
 						
 			resultContext.setStructure(this.parseObjectInternal(xr, ctx, resultContext));
@@ -578,18 +594,24 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 	IGraphable parseObjectInternal(XMLStreamReader xr, FormatterElementContext ctx, XmlIts1FormatterParseResult resultContext) {
 		
 		this.throwIfDisposed();
-		
+
 		// Find a helper
-		
-		String typeName = this.getStructureName(FormatterUtil.getClassForType(ctx.getOwnerClazz(), ctx));
-		
+		Class<?> clazz = FormatterUtil.getClassForType(ctx.getOwnerClazz(), ctx);
+		String xsiType = this.createXSITypeName(clazz, ctx, xr.getNamespaceContext());
+		if(s_typeNameMaps.containsKey(xsiType))
+		{
+			clazz = s_typeNameMaps.get(xsiType);
+			ctx.setOwnerType(clazz);
+		}
+		String typeName = this.getStructureName(clazz);
+
 		// Structure formatter helper
 		IXmlStructureFormatter ixsf = null;
 		
 		// Save current path because it will change later
 		String currentPath = xr.toString();
 		// Is there an XSI type attribute?
-		String xsiType = xr.getAttributeValue(XmlIts1Formatter.NS_XSI, "type");
+		xsiType = xr.getAttributeValue(XmlIts1Formatter.NS_XSI, "type");
 		// Is there a namespace prefix?
 		if(xsiType != null && xsiType.contains(":"))
 		{
@@ -605,7 +627,7 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 			xsiType = null;
 		}
 		
-		if(xsiType != null)
+		if(xsiType != null && !ctx.getIgnoreTypeCasting()) // Generic HACK
 			ixsf = this.getXsiTypeFormatter(xsiType);
 		else
 			for(IStructureFormatter helper : this.getGraphAides())
@@ -653,5 +675,59 @@ public class XmlIts1Formatter implements IStructureFormatter, IXmlStructureForma
 				return (IXmlStructureFormatter)f;
 		return null;
 		
+	}
+	
+	/**
+	 * Creates an XSI:Type name
+	 */
+	public String createXSITypeName(Class<?> clazz)
+	{
+		return this.createXSITypeName(clazz, null, null);
+	}
+	
+	/**
+	 * Create the xsi type name respecting prefixes
+	 */
+	protected String createXSITypeName(Class<?> clazz, FormatterElementContext context, NamespaceContext pfx)
+	{
+		StringBuilder xsiType = new StringBuilder();
+		
+		// Scan for registered types
+		synchronized (this.s_typeNameMaps) {
+			for(String key : this.s_typeNameMaps.keySet())
+				if(this.s_typeNameMaps.get(key).equals(clazz))
+					return key;
+		}
+		
+		// Get the structure attribute
+		Structure structure = clazz.getAnnotation(Structure.class);
+		if(structure == null)
+			xsiType.append(clazz.getName());
+		else
+		{
+			String prefix = pfx.getPrefix(structure.namespaceUri());
+			if(prefix != null && !prefix.equals(""))
+				xsiType.append(String.format("%s:", prefix));
+			
+			// Generic?
+			if(!structure.model().equals(Structure.NULL))
+				xsiType.append(String.format("%s.%s", structure.model(), structure.name()));
+			else
+				xsiType.append(structure.name());
+		}
+		
+		return xsiType.toString();
+	}
+	
+	/**
+	 * Register XSI Type name
+	 */
+	public void registerXSITypeName(String xsiTypeName, Class<?> clazz)
+	{
+		if(this.s_typeNameMaps.containsKey(xsiTypeName))
+			throw new DuplicateItemException(String.format("%s is already registered to another type", xsiTypeName));
+		synchronized (s_typeNameMaps) {
+			this.s_typeNameMaps.put(xsiTypeName, clazz);
+		}
 	}
 }

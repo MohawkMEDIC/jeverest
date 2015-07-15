@@ -35,7 +35,8 @@ public class FormatterElementContext {
 	private Object m_instance;
 	// Cached method scan
 	private static HashMap<Class<?>, List<Method>> s_cachedMethodScan = new HashMap<Class<?>, List<Method>>();
-	
+	// Ignore type casting
+	private boolean ignoreTypeCasting = false;
 	/**
 	 * @return the instance
 	 */
@@ -53,6 +54,18 @@ public class FormatterElementContext {
 	 */
 	public Property getPropertyAnnotation() {
 		return m_propertyAnnotation;
+	}
+	/**
+	 * @return the propertyAnnotation having the specified traversal name
+	 */
+	public Property getPropertyAnnotation(String traversalName) {
+		if(this.m_propertiesAnnotation != null)
+		{
+			for(Property prop : this.m_propertiesAnnotation.value())
+				if(prop.name().equals(traversalName))
+					return prop;
+		}
+		return this.m_propertyAnnotation;
 	}
 	/**
 	 * @param propertyAnnotation the propertyAnnotation to set
@@ -429,4 +442,20 @@ public class FormatterElementContext {
 			rootContext = rootContext.getParentContext();
 		return rootContext;
 	}
+	/**
+	 * Determines whether XSI:TYPE should be ignore
+	 * @return
+	 */
+	public boolean getIgnoreTypeCasting() {
+		return ignoreTypeCasting;
+	}
+	/**
+	 * Determines whether XSI_TYPE should be ignored
+	 * @param ignoreTypeCasting
+	 */
+	public void setIgnoreTypeCasting(boolean ignoreTypeCasting) {
+		this.ignoreTypeCasting = ignoreTypeCasting;
+	}
+	
+	
 }

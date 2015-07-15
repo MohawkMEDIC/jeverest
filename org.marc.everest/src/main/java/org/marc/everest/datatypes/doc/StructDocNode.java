@@ -112,8 +112,15 @@ public abstract class StructDocNode {
         if(!equals) return false;
         
         StructDocNode otherNode = (StructDocNode)other;
-        equals &= otherNode.m_name.equals(this.m_name);
-        equals &= otherNode.m_value.equals(this.m_value);
+        if(otherNode.m_name != null)
+        	equals &= otherNode.m_name.equals(this.m_name);
+        else
+        	equals &= this.m_name == null;
+        if(otherNode.m_value != null)
+        	equals &= otherNode.m_value.equals(this.m_value);
+        else
+        	equals &= this.m_value == null;
+        
         if (this.m_children != null && otherNode.m_children != null &&
             this.m_children.size() == otherNode.m_children.size())
         {

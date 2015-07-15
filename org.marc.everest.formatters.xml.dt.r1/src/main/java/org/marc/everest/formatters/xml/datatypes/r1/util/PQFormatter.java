@@ -115,10 +115,6 @@ public class PQFormatter extends PDVFormatter {
 		String valueString = s.getAttributeValue(null, "value");
 		if(valueString != null)
 			retVal.setValue(new BigDecimal(valueString));
-		if(valueString != null && valueString.contains("."))
-			retVal.setPrecision(valueString.length() - valueString.indexOf("."));
-		else
-			retVal.setPrecision(0);
 		
 		// Content / Elements
 		if(!s.isEndElement())

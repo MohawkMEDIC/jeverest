@@ -41,6 +41,7 @@ import org.marc.everest.formatters.interfaces.IFormatterParseResult;
 import org.marc.everest.formatters.xml.datatypes.r1.DatatypeFormatter;
 import org.marc.everest.formatters.xml.datatypes.r1.DatatypeFormatterGraphResult;
 import org.marc.everest.formatters.xml.datatypes.r1.DatatypeFormatterParseResult;
+import org.marc.everest.formatters.xml.datatypes.r1.R1FormatterCompatibilityMode;
 import org.marc.everest.formatters.xml.datatypes.r1.UnsupportedDatatypeR1PropertyResultDetail;
 import org.marc.everest.interfaces.IGraphable;
 import org.marc.everest.interfaces.ResultDetailType;
@@ -51,7 +52,7 @@ import org.marc.everest.resultdetails.ResultDetail;
 /**
  * Represents a class that can format / graph IVL 
  */
-public class IVLFormatter extends PDVFormatter {
+public class IVLFormatter extends SXCMFormatter {
 
 	@Override
 	public void graph(XMLStreamWriter s, Object o,
@@ -73,9 +74,6 @@ public class IVLFormatter extends PDVFormatter {
 
          try
          {
-	         // Operator
-	         if(instance.getOperator() != null)
-	        	 s.writeAttribute("operator", FormatterUtil.toWireFormat(instance.getOperator()));
 	         
 	         // Valid combinations of data
 	         if(instance.getLow() != null && instance.getHigh() != null)
@@ -172,7 +170,6 @@ public class IVLFormatter extends PDVFormatter {
 	public List<String> getSupportedProperties() {
 		List<String> retVal = super.getSupportedProperties();
 		retVal.addAll(Arrays.asList(new String[] {
-				"operator",
 				"low",
 				"high",
 				"width",
@@ -189,15 +186,8 @@ public class IVLFormatter extends PDVFormatter {
 	public Object parse(XMLStreamReader s, FormatterElementContext context,
 			DatatypeFormatterParseResult result) {
 		
-		// Preserve Operator
-		SetOperator operator = null;
-		if(s.getAttributeValue(null, "operator") != null)
-			operator = FormatterUtil.fromWireFormat(s.getAttributeValue(null, "operator"), SetOperator.class);
 		
-		IVL retVal = super.parse(s, context, result, IVL.class);
-
-		if(operator != null)
-			retVal.setOperator(operator);
+		IVL retVal = super.parseSxcm(s, context, result, IVL.class);
 		
 		// Operator attribute
 		// Append warning when value is used
@@ -255,6 +245,14 @@ public class IVLFormatter extends PDVFormatter {
 							IFormatterParseResult hostResult = this.getHost().parse(s, context.findChildContextFromName("width", PropertyType.NONSTRUCTURAL, IVL.class));
 							result.addResultDetail(hostResult.getDetails());
 							retVal.setWidth((PQ)hostResult.getStructure());
+						}
+						else if(s.getLocalName().equals("center"))
+						{
+							if(!result.getCompatibilityMode().equals(R1FormatterCompatibilityMode.ClinicalDocumentArchitecture))
+							result.addResultDetail(new UnsupportedDatatypeR1PropertyResultDetail(ResultDetailType.WARNING, "IVL", "center", s.toString()));
+							IFormatterParseResult hostResult = this.getHost().parse(s, context.findChildContextFromName("value", PropertyType.STRUCTURAL, IVL.class));
+							result.addResultDetail(hostResult.getDetails());
+							retVal.setValue((IAny)hostResult.getStructure());
 						}
 						else
 							result.addResultDetail(new NotImplementedElementResultDetail(ResultDetailType.WARNING, s.getLocalName(), s.getNamespaceURI(), s.toString(), null));

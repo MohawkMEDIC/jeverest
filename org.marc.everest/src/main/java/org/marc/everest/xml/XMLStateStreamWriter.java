@@ -331,7 +331,7 @@ public class XMLStateStreamWriter implements XMLStreamWriter {
 	 */
 	public void writeStartElement(String localName) throws XMLStreamException {
 		
-		// Check the attribute stack, is there any attributes in it?
+			// Check the attribute stack, is there any attributes in it?
 		//if(this.m_attributeBuffer.size() > 0)
 		if(this.m_currentPath.size() > 0) // Flush
 			this.flushAttributes(true);
@@ -371,7 +371,10 @@ public class XMLStateStreamWriter implements XMLStreamWriter {
 			this.flushAttributes(true);
 
 		// add to path
-		this.m_currentPath.push(new QNameFlushable(namespaceURI, localName, prefix));
+		if(prefix != null)
+			this.m_currentPath.push(new QNameFlushable(namespaceURI, localName, prefix));
+		else
+			this.m_currentPath.push(new QNameFlushable(namespaceURI, localName));
 	}
 
 	/**
@@ -397,7 +400,13 @@ public class XMLStateStreamWriter implements XMLStreamWriter {
 				if(this.getPrefix(elementName.getNamespaceURI()) == null)
 					m_underlyingStream.writeStartElement(elementName.getLocalPart());
 				else
-					m_underlyingStream.writeStartElement(this.getPrefix(elementName.getNamespaceURI()), elementName.getLocalPart(),  elementName.getNamespaceURI());
+				{
+					String pfx = this.getNamespaceContext().getPrefix(elementName.getNamespaceURI());
+					if(pfx == null || pfx.isEmpty())
+						m_underlyingStream.writeStartElement(elementName.getLocalPart());
+					else
+						m_underlyingStream.writeStartElement(pfx, elementName.getLocalPart(),  elementName.getNamespaceURI());
+				}
 			}
 		}
 		else
@@ -409,7 +418,13 @@ public class XMLStateStreamWriter implements XMLStreamWriter {
 				if(elementName.getNamespaceURI() == "" || elementName.getNamespaceURI() == null)
 					m_underlyingStream.writeEmptyElement(elementName.getLocalPart());
 				else
-					m_underlyingStream.writeEmptyElement(this.getPrefix(elementName.getNamespaceURI()), elementName.getLocalPart(), elementName.getNamespaceURI());
+				{
+					String pfx = this.getNamespaceContext().getPrefix(elementName.getNamespaceURI());
+					if(pfx == null || pfx.isEmpty())
+						m_underlyingStream.writeEmptyElement(elementName.getLocalPart());
+					else
+						m_underlyingStream.writeEmptyElement(pfx, elementName.getLocalPart(), elementName.getNamespaceURI());
+				}
 			}
 		}	
 		

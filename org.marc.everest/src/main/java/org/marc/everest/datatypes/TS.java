@@ -177,7 +177,7 @@ public class TS extends QTY<String> implements IPointInTime, IPqTranslatable<TS>
 	 * @param precision The precision of the time stamp
 	 */
 	public TS(Calendar value, int precision) { this(value); this.m_dateValuePrecision = precision; }
-	
+
 	/**
 	 * Get the TS value given a string
 	 */

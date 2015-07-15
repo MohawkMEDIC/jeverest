@@ -57,7 +57,7 @@ import org.marc.everest.resultdetails.ResultDetail;
  * @author Justin Fyfe
  *
  */
-public class PIVLFormatter extends ANYFormatter  {
+public class PIVLFormatter extends SXCMFormatter  {
 
 	/**
 	 * Graph the PIVL
@@ -78,8 +78,6 @@ public class PIVLFormatter extends ANYFormatter  {
 
         try {
 	        // Operator
-		    if(instance.getOperator() != null)
-				s.writeAttribute("operator", FormatterUtil.toWireFormat(instance.getOperator()));
             if (instance.getAlignment() != null)
                 s.writeAttribute("alignment", FormatterUtil.toWireFormat(instance.getAlignment()));
             if (instance.getInstitutionSpecified() != null)
@@ -143,11 +141,9 @@ public class PIVLFormatter extends ANYFormatter  {
 	@Override
 	public Object parse(XMLStreamReader s, FormatterElementContext context,
 			DatatypeFormatterParseResult result) {
-		PIVL<?> retVal = super.parse(s, context, result, PIVL.class);
+		PIVL<?> retVal = super.parseSxcm(s, context, result, PIVL.class);
 		
 		// Operator attribute
-		if(s.getAttributeValue(null, "operator") != null)
-			retVal.setOperator(FormatterUtil.fromWireFormat(s.getAttributeValue(null, "operator"), SetOperator.class));
 		// Append warning when value is used
 		if(s.getAttributeValue(null, "value") != null)
 			result.addResultDetail(new NotSupportedChoiceResultDetail(ResultDetailType.WARNING, "Though the XML ITS supports it, use of the IVL 'value' attribute should be avoided", s.toString(), null));
@@ -237,7 +233,6 @@ public class PIVLFormatter extends ANYFormatter  {
 	public List<String> getSupportedProperties() {
 		List<String> retVal = super.getSupportedProperties();
 		retVal.addAll(Arrays.asList(new String[] {
-				"operator",
 				"alignment",
 				"phase",
 				"period",

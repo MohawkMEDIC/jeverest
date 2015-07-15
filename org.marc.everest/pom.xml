@@ -2,9 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.marc.everest</groupId>
 	<artifactId>everest-core</artifactId>
-	<version>1.0.17</version>
+	<version>1.1.0</version>
 	<name>org.marc.everest</name>
-	<description>MARC-HI Everest Framework 1.0</description>
+	<description>MARC-HI Everest Framework 1.1</description>
 	<issueManagement>
 	    <url>http://te.marc-hi.ca/issue/default.aspx?project=6e2de429beae44359a1b23975a90a71b</url>
     </issueManagement>
@@ -47,7 +47,8 @@
 	</dependencies>
 	
 	<scm>
-		<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.0.17/org.marc.everest</url>
+
+		<url>https://fisheye.marc-hi.ca/svn/jEverest/tags/1.1.0/org.marc.everest</url>
 	</scm>
 	<repositories>
 		<repository>
