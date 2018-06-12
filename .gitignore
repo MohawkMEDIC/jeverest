@@ -5,3 +5,10 @@ api/.settings/
 api/target/
 omod/target/
 *.iml
+.idea/
+*.class
+target/**
+org.marc.everest/target/
+org.marc.everest.connectors.spring/target/
+org.marc.everest.formatters.xml.dt.r1/target/
+org.marc.everest.formatters.xml.its1/target/
