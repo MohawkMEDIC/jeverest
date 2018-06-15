@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/everest-connectors-spring.iml" filepath="$PROJECT_DIR$/everest-connectors-spring.iml" />
+      <module fileurl="file://$PROJECT_DIR$/everest-core.iml" filepath="$PROJECT_DIR$/everest-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/everest-formatters-xml-dt-r1.iml" filepath="$PROJECT_DIR$/everest-formatters-xml-dt-r1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/everest-formatters-xml-its1.iml" filepath="$PROJECT_DIR$/everest-formatters-xml-its1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/everest-root.iml" filepath="$PROJECT_DIR$/everest-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/everest-samples-spring.iml" filepath="$PROJECT_DIR$/everest-samples-spring.iml" />
+      <module fileurl="file://$PROJECT_DIR$/everest-test.iml" filepath="$PROJECT_DIR$/everest-test.iml" />
+    </modules>
+  </component>
+</project>

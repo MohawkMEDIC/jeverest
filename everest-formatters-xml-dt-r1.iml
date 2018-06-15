@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/org.marc.everest.formatters.xml.dt.r1/target/classes" />
+    <output-test url="file://$MODULE_DIR$/org.marc.everest.formatters.xml.dt.r1/target/test-classes" />
+    <content url="file://$MODULE_DIR$/org.marc.everest.formatters.xml.dt.r1">
+      <sourceFolder url="file://$MODULE_DIR$/org.marc.everest.formatters.xml.dt.r1/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/org.marc.everest.formatters.xml.dt.r1/src/main/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/org.marc.everest.formatters.xml.dt.r1/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="everest-core" />
+  </component>
+</module>
